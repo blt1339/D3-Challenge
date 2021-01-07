@@ -36,6 +36,27 @@ function xScale(censusData, chosenXAxis) {
   return xLinearScale;
 
 }
+// function used for updating xAxis var upon click on axis label
+function renderXAxes(newXScale, xAxis) {
+  var bottomAxis = d3.axisBottom(newXScale);
+
+  xAxis.transition()
+    .duration(1000)
+    .call(bottomAxis);
+
+  return xAxis;
+}
+
+// function used for updating yAxis var upon click on axis label
+function renderYAxes(newYScale, yAxis) {
+  var bottomAxis = d3.axisBottom(newYScale);
+
+  xAxis.transition()
+    .duration(1000)
+    .call(leftAxis);
+
+  return yAxis;
+}
 
 // function used for updating x-scale var upon click on axis label
 function yScale(censusData, chosenXAxis) {
