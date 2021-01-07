@@ -20,13 +20,49 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+// Initial axis setup
+var chosenXAxis = "healthcare";
+var chosenYAxis = "income";
+
+// function used for updating x-scale var upon click on axis label
+function xScale(censusData, chosenXAxis) {
+  // create scales
+  var xLinearScale = d3.scaleLinear()
+    .domain([d3.min(censusData, d => d[chosenXAxis]) * 0.8,
+      d3.max(censusData, d => d[chosenXAxis]) * 1.2
+    ])
+    .range([0, width]);
+
+  return xLinearScale;
+
+}
+
+// function used for updating x-scale var upon click on axis label
+function yScale(censusData, chosenXAxis) {
+  // create scales
+  var xLinearScale = d3.scaleLinear()
+    .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
+      d3.max(censusData, d => d[chosenYAxis]) * 1.2
+    ])
+    .range([0, width]);
+
+  return yLinearScale;
+
+}
+
+
+
 // Import Data
 d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData,) {
-    // Step 1: Parse Data/Cast as numbers
+    // Parse Data/Cast as numbers
     // ==============================
     censusData.forEach(function(data) {
+      data.poverty = +data.poverty;
+      data.age = +data.age;
       data.income = +data.income;
       data.healthcare = +data.healthcare;
+      data.obesity = +data.obesity;
+      data.smokes = +data.smokes;
     });
 
     // Step 2: Create scale functions
@@ -71,7 +107,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData,) {
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.rockband}<br>Income: ${d.income}<br>Healthcare: ${d.healthcare}`);
+        return (`${d.state}<br>Income: ${d.income}<br>Healthcare: ${d.healthcare}`);
       });
 
     // Step 7: Create tooltip in the chart
@@ -95,12 +131,12 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData,) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "axisText")
-      .text("Income");
+      .text("Household Income (Median)");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "axisText")
-      .text("Healthcare");
+      .text("Lacks Healthcare (%)");
       console.log(chartGroup);
   }).catch(function(error) {
     console.log(error);
