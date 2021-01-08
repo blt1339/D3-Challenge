@@ -36,6 +36,19 @@ function xScale(censusData, chosenXAxis) {
   return xLinearScale;
 
 }
+// function used for updating x-scale var upon click on axis label
+function yScale(censusData, chosenXAxis) {
+  // create scales
+  var xLinearScale = d3.scaleLinear()
+    .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
+      d3.max(censusData, d => d[chosenYAxis]) * 1.2
+    ])
+    .range([0, width]);
+
+  return yLinearScale;
+
+}
+
 // function used for updating xAxis var upon click on axis label
 function renderXAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
@@ -49,7 +62,7 @@ function renderXAxes(newXScale, xAxis) {
 
 // function used for updating yAxis var upon click on axis label
 function renderYAxes(newYScale, yAxis) {
-  var bottomAxis = d3.axisBottom(newYScale);
+  var leftAxis = d3.axisBottom(newYScale);
 
   xAxis.transition()
     .duration(1000)
@@ -57,19 +70,18 @@ function renderYAxes(newYScale, yAxis) {
 
   return yAxis;
 }
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, ChosenYAxis) {
 
-// function used for updating x-scale var upon click on axis label
-function yScale(censusData, chosenXAxis) {
-  // create scales
-  var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
-      d3.max(censusData, d => d[chosenYAxis]) * 1.2
-    ])
-    .range([0, width]);
+  circlesGroup.transition()
+    .duration(1000)
+    .attr("cx", d => newXScale(d[chosenXAxis]))
+    .attr("cy", d => newYScale(d[chosenYAxis]));
 
-  return yLinearScale;
-
+  return circlesGroup;
 }
+
 
 
 
