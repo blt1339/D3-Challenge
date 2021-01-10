@@ -1,31 +1,5 @@
-var svgWidth = 960;
-var svgHeight = 500;
-
-var margin = {
-  top: 20,
-  right: 40,
-  bottom: 100,
-  left: 100
-};
-
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
-
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-var svg = d3.select("#scatter")
-  .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
-
-var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-// Initial axis setup
-var chosenXAxis = "poverty";
-var chosenYAxis = "obesity";
-
 // function used for updating x-scale var upon click on axis label
-function xScale(censusData, chosenXAxis) {
+function xScale(censusData, chosenXAxis,width) {
   // create scales
   var xLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenXAxis]) * 0.8,
@@ -36,7 +10,7 @@ function xScale(censusData, chosenXAxis) {
 
 }
 // function used for updating x-scale var upon click on axis label
-function yScale(censusData, chosenYAxis) {
+function yScale(censusData, chosenYAxis,height) {
   // create scales
   var yLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
@@ -154,6 +128,36 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
   return circlesGroup;
 }
 
+function drawChart() {
+// Define the windo height and width
+var svgWidth = window.innerWidth;
+var svgHeight = window.innerHeight;
+
+  var margin = {
+  top: 20,
+  right: 40,
+  bottom: 100,
+  left: 100
+};
+
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
+
+var svgArea = d3.select("body").select("svg");
+// clear svg is not empty
+  if (!svgArea.empty()) {
+    svgArea.remove();
+  }
+
+// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+var svg = d3.select("#scatter")
+  .append("svg")
+  .attr("width", svgWidth)
+  .attr("height", svgHeight);
+
+var chartGroup = svg.append("g")
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
 
 // Import Data
 d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
@@ -170,9 +174,9 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
     // Step 2: Create scale functions
     // ==============================
-    var xLinearScale = xScale(censusData, chosenXAxis);
+    var xLinearScale = xScale(censusData, chosenXAxis,width);
 
-    var yLinearScale = yScale(censusData, chosenYAxis);
+    var yLinearScale = yScale(censusData, chosenYAxis,height);
 
     // Create axis functions
     // ==============================
@@ -294,7 +298,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
             // functions here found above csv import
             // updates x scale for new data
-            xLinearScale = xScale(censusData, chosenXAxis);
+            xLinearScale = xScale(censusData, chosenXAxis,width);
 
             // updates x axis with transition
             xAxis = renderXAxes(xLinearScale, xAxis);
@@ -356,7 +360,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
             // functions here found above csv import
             // updates x scale for new data
-            yLinearScale = yScale(censusData, chosenYAxis);
+            yLinearScale = yScale(censusData, chosenYAxis,height);
 
             // updates x axis with transition
             yAxis = renderYAxes(yLinearScale, yAxis);
@@ -412,3 +416,13 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
   }).catch(function(error) {
     console.log(error);
   });
+}
+
+
+// Initial axis setup
+var chosenXAxis = "poverty";
+var chosenYAxis = "obesity";
+drawChart();
+
+// When the browser window is resized, drawChart() is called.
+d3.select(window).on("resize", drawChart);
