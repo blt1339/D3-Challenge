@@ -236,8 +236,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .attr("x", 0)
         .attr("y", 20)
         .attr("value", "poverty") // value to grab for event listener
-        .classed("active", true)
-        .classed("inactive", false)
+        .classed("active", false)
+        .classed("inactive", true)
         .text("In Poverty (%)");
 
       var ageLabel = xLabelsGroup.append("text")
@@ -260,8 +260,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .attr("x", -200)
         .attr("y", -80)
         .attr("value", "obesity") // value to grab for event listener
-        .classed("active", true)
-        .classed("inactive", false)
+        .classed("active", false)
+        .classed("inactive", true)
         .text("Obese (%)");
 
         var smokesLabel = yLabelsGroup.append("text")
@@ -280,6 +280,36 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .classed("inactive", true)        
         .text("Lacks Helathcare (%)");
 
+        // change the chosenXAxis to active and not inactive
+        if (chosenXAxis === "poverty") {
+          povertyLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        } else if (chosenXAxis === "age") {
+            ageLabel
+              .classed("active", true)
+              .classed("inactive", false);
+        } else {
+            incomeLabel
+              .classed("active", true)
+              .classed("inactive", false);
+        }
+
+        // change the chosenYAxis to active and not inactive
+        if (chosenYAxis === "obesity") {
+          obesityLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        } else if (chosenYAxis === "smokes") {
+            smokesLabel
+              .classed("active", true)
+              .classed("inactive", false);
+        } else {
+            healthcareLabel
+              .classed("active", true)
+              .classed("inactive", false);
+        }
+        
         // updateToolTip function inn
         var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
@@ -290,7 +320,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
 
           var xValue = d3.select(this).attr("value");
-
+          console.log(xValue);
+          console.log(chosenXAxis)
           if (xValue !== chosenXAxis) {
 
             // replaces chosenXAxis with value
@@ -352,7 +383,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
           .on("click", function() {
           // get value of selection
           var yValue = d3.select(this).attr("value");
-
+          console.log(yValue);
+          console.log(chosenYAxis);
           if (yValue !== chosenYAxis) {
 
             // replaces chosenXAxis with value
@@ -371,7 +403,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
             // updates tooltips with new info
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-            console.log(chosenYAxis);
+            
             // changes classes to change bold text
             if (chosenYAxis === "obesity") {
                 obesityLabel
@@ -405,12 +437,12 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
                     .classed("inactive", true);
               }
 
-              console.log('obesity');
-              console.log(obesityLabel);
-              console.log('smokes');
-              console.log(smokesLabel);              
-              console.log('healthcare');
-              console.log(healthcareLabel);
+              // console.log('obesity');
+              // console.log(obesityLabel);
+              // console.log('smokes');
+              // console.log(smokesLabel);              
+              // console.log('healthcare');
+              // console.log(healthcareLabel);
           }
         });
   }).catch(function(error) {
