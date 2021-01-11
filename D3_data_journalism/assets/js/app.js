@@ -1,4 +1,4 @@
-// function used for updating x-scale var upon click on axis label
+// Function used for updating x-scale upon click on axis label
 function xScale(censusData, chosenXAxis,width) {
   // create scales
   var xLinearScale = d3.scaleLinear()
@@ -9,7 +9,7 @@ function xScale(censusData, chosenXAxis,width) {
   return xLinearScale;
 
 }
-// function used for updating x-scale var upon click on axis label
+// Function used for updating Y-scale upon click on axis label
 function yScale(censusData, chosenYAxis,height) {
   // create scales
   var yLinearScale = d3.scaleLinear()
@@ -21,7 +21,7 @@ function yScale(censusData, chosenYAxis,height) {
 
 }
 
-// function used for updating xAxis var upon click on axis label
+// Function used for updating X-Axis upon click on axis label
 function renderXAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
@@ -32,7 +32,7 @@ function renderXAxes(newXScale, xAxis) {
   return xAxis;
 }
 
-// function used for updating yAxis var upon click on axis label
+// Function used for updating Y-Axis upon click on axis label
 function renderYAxes(newYScale, yAxis) {
   var leftAxis = d3.axisLeft(newYScale);
 
@@ -42,8 +42,7 @@ function renderYAxes(newYScale, yAxis) {
 
   return yAxis;
 }
-// function used for updating circles group with a transition to
-// new circles
+// Function to update circles group with a transition to new circles
 function renderXCircles(circlesGroup, newXScale, chosenXAxis) {
 
   circlesGroup.transition()
