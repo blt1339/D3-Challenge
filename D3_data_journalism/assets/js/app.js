@@ -139,6 +139,13 @@ var svgHeight = window.innerHeight - 200;
   bottom: 100,
   left: 100
 };
+console.log(svgWidth);
+console.log(svgHeight);
+console.log(margin.top);
+console.log(margin.right);
+console.log(margin.bottom);
+console.log(margin.left);
+
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
@@ -175,7 +182,6 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = xScale(censusData, chosenXAxis,width);
-
     var yLinearScale = yScale(censusData, chosenYAxis,height);
 
     // Create axis functions
@@ -257,7 +263,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .text("Household Income (Median)");
 
         var obesityLabel = yLabelsGroup.append("text")
-        .attr("x", -200)
+        .attr("x", 0 - (height/2))
         .attr("y", -80)
         .attr("value", "obesity") // value to grab for event listener
         .classed("active", false)
@@ -265,7 +271,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .text("Obese (%)");
 
         var smokesLabel = yLabelsGroup.append("text")
-        .attr("x", -200)
+        .attr("x", 0 - (height/2))
         .attr("y", -60)
         .attr("value", "smokes") // value to grab for event listener
         .classed("active", false)
@@ -273,7 +279,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
         .text("Smokes (%)");
 
         var healthcareLabel = yLabelsGroup.append("text")
-        .attr("x", -200)
+        .attr("x", 0 - (height/2))
         .attr("y", -40)
         .attr("value", "healthcare") // value to grab for event listener
         .classed("active", false)
@@ -320,8 +326,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
 
           var xValue = d3.select(this).attr("value");
-          console.log(xValue);
-          console.log(chosenXAxis)
+
           if (xValue !== chosenXAxis) {
 
             // replaces chosenXAxis with value
@@ -383,8 +388,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
           .on("click", function() {
           // get value of selection
           var yValue = d3.select(this).attr("value");
-          console.log(yValue);
-          console.log(chosenYAxis);
+
           if (yValue !== chosenYAxis) {
 
             // replaces chosenXAxis with value
@@ -436,13 +440,6 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
                     .classed("active", false)
                     .classed("inactive", true);
               }
-
-              // console.log('obesity');
-              // console.log(obesityLabel);
-              // console.log('smokes');
-              // console.log(smokesLabel);              
-              // console.log('healthcare');
-              // console.log(healthcareLabel);
           }
         });
   }).catch(function(error) {
