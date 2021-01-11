@@ -211,9 +211,9 @@ function drawChart() {
       .append("circle")
       .attr("cx", d => xLinearScale(d[chosenXAxis]))
       .attr("cy", d => yLinearScale(d[chosenYAxis]))
-      .attr("r", 15)
-      .attr("fill", "blue")
-      .attr("opacity", ".6");
+      .attr("r", 12)
+      .attr("fill", "lightblue")
+      .attr("opacity", ".8");
 
     // append text (state abbreviation) to inside of circles 
     var textCircles = chartGroup.append("g")
