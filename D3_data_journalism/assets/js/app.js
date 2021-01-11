@@ -1,4 +1,4 @@
-// Function used for updating x-scale upon click on axis label
+// Function to update X-scale on click on axis label
 function xScale(censusData, chosenXAxis,width) {
   // create scales
   var xLinearScale = d3.scaleLinear()
@@ -9,7 +9,7 @@ function xScale(censusData, chosenXAxis,width) {
   return xLinearScale;
 
 }
-// Function used for updating Y-scale upon click on axis label
+// Function to update Y-scale on click on axis label
 function yScale(censusData, chosenYAxis,height) {
   // create scales
   var yLinearScale = d3.scaleLinear()
@@ -21,7 +21,7 @@ function yScale(censusData, chosenYAxis,height) {
 
 }
 
-// Function used for updating X-Axis upon click on axis label
+// Function to update X-Axis on click on axis label
 function renderXAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
@@ -32,7 +32,7 @@ function renderXAxes(newXScale, xAxis) {
   return xAxis;
 }
 
-// Function used for updating Y-Axis upon click on axis label
+// Function to update Y-Axis on click on axis label
 function renderYAxes(newYScale, yAxis) {
   var leftAxis = d3.axisLeft(newYScale);
 
@@ -43,25 +43,29 @@ function renderYAxes(newYScale, yAxis) {
   return yAxis;
 }
 // Function to update circles group with a transition to new circles
+// using chosenXAxis
 function renderXCircles(circlesGroup, newXScale, chosenXAxis) {
 
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]))
 
-
   return circlesGroup;
 }
 
+// Function to update circles group with a transition to new circles
+// using chosenYAxis
 function renderYCircles(circlesGroup, newYScale, chosenYAxis) {
 
   circlesGroup.transition()
     .duration(1000)
     .attr("cy", d => newYScale(d[chosenYAxis]))
 
-
   return circlesGroup;
 }
+
+// Function to update the text in the circles with a transition to new circles
+// using chosenXAxis
 function renderXCircleText(textCircles, newXScale, chosenXAxis) {
 
   textCircles.transition()
@@ -71,6 +75,8 @@ function renderXCircleText(textCircles, newXScale, chosenXAxis) {
   return textCircles;
 }
 
+// Function to update the text in the circles with a transition to new circles
+// using chosenXAxis
 function renderYCircleText(textCircles, newYScale, chosenYAxis) {
 
   textCircles.transition()
@@ -80,12 +86,14 @@ function renderYCircleText(textCircles, newYScale, chosenYAxis) {
   return textCircles;
 }
 
-// function used for updating circles group with new tooltip
+// Function to update circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
-
+  
+  // Define variables for the tip X Label and tip Y Label
   let tipXLabel;
   let tipYLabel;
 
+  // Set the tipXLabel value according to chosenXAxis
   if (chosenXAxis === "poverty") {
     tipXLabel = "In Poverty (%)";
   }
@@ -96,7 +104,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
     tipXLabel = "Household Income (Median)";
   }
 
-
+  // Set the tipYLabel value according to chosenYAxis
   if (chosenYAxis === "obesity") {
     tipYLabel = "Obese (%)";
   }
@@ -107,6 +115,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
     tipYLabel = "Lacks Healthcare (%)";
   }
 
+  // Setup toolTip using d3.tip for X and Y Axis
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([40, 60])
@@ -116,59 +125,52 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
   circlesGroup.call(toolTip);
 
+  // Update so the toolTip shows up when mouse over
   circlesGroup.on("mouseover", function(data) {
     toolTip.show(data,this);
   })
-    // on mouseout event
+    // And goes away when you mouseout
     .on("mouseout", function(data, index) {
-      toolTip.hide(data,this);
+      toolTip.hide(data);
     });
 
   return circlesGroup;
 }
 
 function drawChart() {
-// Define the windo height and width
-var svgWidth = window.innerWidth - 200;
-var svgHeight = window.innerHeight - 200;
+  // Define the windo height and width
+  var svgWidth = window.innerWidth - 200;
+  var svgHeight = window.innerHeight - 200;
 
   var margin = {
-  top: 20,
-  right: 40,
-  bottom: 100,
-  left: 100
-};
-console.log(svgWidth);
-console.log(svgHeight);
-console.log(margin.top);
-console.log(margin.right);
-console.log(margin.bottom);
-console.log(margin.left);
+    top: 20,
+    right: 40,
+    bottom: 100,
+    left: 100
+  };
 
+  var width = svgWidth - margin.left - margin.right;
+  var height = svgHeight - margin.top - margin.bottom;
 
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
-
-var svgArea = d3.select("body").select("svg");
-// clear svg is not empty
+  var svgArea = d3.select("body").select("svg");
+  // clear svg is not empty
   if (!svgArea.empty()) {
     svgArea.remove();
   }
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-var svg = d3.select("#scatter")
-  .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
+  // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+  var svg = d3.select("#scatter")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
 
-var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  var chartGroup = svg.append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
 // Import Data
-d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
+  d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     // Parse Data/Cast as numbers
-    // ==============================
     censusData.forEach(function(data) {
       data.poverty = +data.poverty;
       data.age = +data.age;
@@ -209,8 +211,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
       .append("circle")
       .attr("cx", d => xLinearScale(d[chosenXAxis]))
       .attr("cy", d => yLinearScale(d[chosenYAxis]))
-      .attr("r", 10)
-      .attr("fill", "lightblue")
+      .attr("r", 15)
+      .attr("fill", "blue")
       .attr("opacity", ".6");
 
     // append text (state abbreviation) to inside of circles 
