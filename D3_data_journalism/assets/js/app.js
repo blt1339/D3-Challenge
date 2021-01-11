@@ -130,8 +130,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
 function drawChart() {
 // Define the windo height and width
-var svgWidth = window.innerWidth;
-var svgHeight = window.innerHeight;
+var svgWidth = window.innerWidth - 200;
+var svgHeight = window.innerHeight - 200;
 
   var margin = {
   top: 20,
