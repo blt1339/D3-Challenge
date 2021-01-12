@@ -137,23 +137,18 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
   return circlesGroup;
 }
 
+// Function to draw the chart
 function drawChart() {
 
-  // Define the window height and width
-  
-  let widthReduction = 0;
-  let heightReduction = 0;
-
-  if (window.innerWidth > 100) {
-    widthReduction = 75
+  // Define the width and height
+  let widthReduct = 0;
+  if (window.innerWidth > 225) {
+    widthReduct = 225
   }
+  var svgWidth = window.innerWidth - widthReduct;
+  var svgHeight = window.innerHeight;
 
-  if (window.innerHeight > 100){
-    heightReduction = 75;
-  }
-  var svgWidth = window.innerWidth - widthReduction;
-  var svgHeight = window.innerHeight - heightReduction;
-
+  // Setup the margin
   var margin = {
     top: 20,
     right: 40,
@@ -164,13 +159,16 @@ function drawChart() {
   var width = svgWidth - margin.left - margin.right;
   var height = svgHeight - margin.top - margin.bottom;
 
+  // Define the svgArea
   var svgArea = d3.select("body").select("svg");
+ 
   // clear svg is not empty
   if (!svgArea.empty()) {
     svgArea.remove();
   }
 
-  // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+  // Create an SVG wrapper, append an SVG group that will hold our chart, and 
+  // shift the latter by left and top margins.
   var svg = d3.select("#scatter")
     .append("svg")
     .attr("width", svgWidth)
@@ -192,27 +190,24 @@ function drawChart() {
       data.smokes = +data.smokes;
     });
 
-    // Step 2: Create scale functions
-    // ==============================
+    // Create scale functions
     var xLinearScale = xScale(censusData, chosenXAxis,width);
     var yLinearScale = yScale(censusData, chosenYAxis,height);
 
     // Create axis functions
-    // ==============================
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
     // append x axis
     var xAxis = chartGroup.append("g")
-    .classed("x-axis", true)
-    .attr("transform", `translate(0, ${height})`)
-    .call(bottomAxis);
+      .classed("x-axis", true)
+      .attr("transform", `translate(0, ${height})`)
+      .call(bottomAxis);
 
     // append y axis
     var yAxis = chartGroup.append("g")
-    .classed("y-axis", true)
-    // .attr("transform")
-    .call(leftAxis);
+      .classed("y-axis", true)
+      .call(leftAxis);
 
 
     // append initial circles
