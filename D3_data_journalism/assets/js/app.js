@@ -118,7 +118,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
   // Setup toolTip using d3.tip for X and Y Axis
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
-    .offset([40, 60])
+    // .offset([20, 40])
     .html(function(d) {
       return (`${d.state}<br>${tipXLabel} ${d[chosenXAxis]}<br>${tipYLabel} ${d[chosenYAxis]}`);
     });
@@ -138,9 +138,21 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 }
 
 function drawChart() {
-  // Define the windo height and width
-  var svgWidth = window.innerWidth - 200;
-  var svgHeight = window.innerHeight - 200;
+
+  // Define the window height and width
+  
+  let widthReduction = 0;
+  let heightReduction = 0;
+
+  if (window.innerWidth > 100) {
+    widthReduction = 75
+  }
+
+  if (window.innerHeight > 100){
+    heightReduction = 75;
+  }
+  var svgWidth = window.innerWidth - widthReduction;
+  var svgHeight = window.innerHeight - heightReduction;
 
   var margin = {
     top: 20,
@@ -316,7 +328,6 @@ function drawChart() {
               .classed("active", true)
               .classed("inactive", false);
         }
-        
         // updateToolTip function inn
         var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
@@ -345,6 +356,8 @@ function drawChart() {
             // Update the circle text for new X & Y values
             textCircles = renderXCircleText(textCircles, xLinearScale, chosenXAxis);
 
+            console.log(chosenXAxis);
+            console.log(chosenYAxis);
             // updates tooltips with new info
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
@@ -405,7 +418,8 @@ function drawChart() {
             // updates circles with new x values
             circlesGroup = renderYCircles(circlesGroup, yLinearScale, chosenYAxis);
             textCircles = renderYCircleText(textCircles, yLinearScale, chosenYAxis);
-
+            console.log(chosenXAxis);
+            console.log(chosenYAxis);
             // updates tooltips with new info
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
             
